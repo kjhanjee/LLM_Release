@@ -24,6 +24,6 @@ The model can be improved for 4K and 8K context lengths. For every 2K increase i
 
 ## Current Training infrastructure
 Currently the model is being trained on simple retail specs
-CPU - Ryzen 5 5600X
-GPU - RTX 3070 8GB
-RAM - 32 Gigabyte DDR4
+* CPU - Ryzen 5 5600X
+* GPU - RTX 3070 8GB
+* RAM - 32 Gigabyte DDR4
