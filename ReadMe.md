@@ -9,7 +9,7 @@ Currently experimenting on creating model with 64 parallel layers in two stacks 
 # Performance
 
 ## Size
-Model is half the size of a 128 Layer normal Transformer Decoder based model
+Model is nearly 1/5th the size of a 128 Layer normal Transformer Decoder based model 
 
 ## Loss Reduction
 Model seems to be getting low losses after just 100 training steps which given the model size and architecture is a great feat
