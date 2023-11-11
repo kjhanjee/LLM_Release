@@ -41,7 +41,6 @@ class DecoderStackLayer(torch.nn.Module):
         
         self.decoder_dim1 = int(embedding_dimension/number_of_layers)
         self.feed_forward1 = FeedForwardLayer(embedding_dimension,4*embedding_dimension)
-        self.normalize1 = torch.nn.LayerNorm(embedding_dimension)
         
         self.normalize2_1 = torch.nn.LayerNorm(embedding_dimension)
         self.decoder_dim2 = int(4*embedding_dimension/number_of_layers)
@@ -73,6 +72,5 @@ class DecoderStackLayer(torch.nn.Module):
             decoder_outputs = self.normalize2_2(decoder_outputs)
         else:
             decoder_outputs = self.feed_forward1(decoder_outputs)
-            decoder_outputs = self.normalize1(decoder_outputs)
         return decoder_outputs
     
