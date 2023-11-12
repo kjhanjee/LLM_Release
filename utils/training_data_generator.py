@@ -158,5 +158,5 @@ class TrainingDataGen:
                 if len(sentences) == 0:
                     continue
                 elif len(sentences) > 0:
-                    self.completed_files.append(path)
-                    yield sentences
+                    # self.completed_files.append(path)
+                    yield path, sentences
