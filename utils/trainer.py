@@ -89,7 +89,7 @@ class Trainer:
                         for _ in range(0,self.max_sequence_length-len(ids2) + 1):
                             ids2.append(24)
                         sequences.append(ids2)
-                    i = i + 1
+                    i = i + 10
                     if len(sequences) == self.batch_size:
                         sequences2 = sequences
                         if iter_index >= self.step:
