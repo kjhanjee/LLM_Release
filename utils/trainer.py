@@ -89,7 +89,7 @@ class Trainer:
                         for _ in range(0,self.max_sequence_length-len(ids2) + 1):
                             ids2.append(24)
                         sequences.append(ids2)
-                    i = i + 10
+                    i = i + self.batch_size
                     if len(sequences) == self.batch_size:
                         sequences2 = sequences
                         if iter_index >= self.step:
@@ -161,7 +161,7 @@ class Trainer:
                         # The loss is computed on the model output and the target
                         loss = self.loss_function(model_output.transpose(1, 2), target_tensor)
                             
-                        loss = loss / accum_iter
+                        # loss = loss / accum_iter
                             
                         outputs = [[] for counter in range(batch_size)]
                         for index, tensor in enumerate(torch.softmax(out,dim=-1)):
@@ -175,12 +175,11 @@ class Trainer:
                         print(f"\n\nStep {step} Output: "+str(self.tokenizer.decode_batch(outputs,skip_special_tokens=False)))
                         
                         loss.backward()                     
-                        torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)                   
-                            
+                        # torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
+                        self.optimizer.step()
+                        self.optimizer.zero_grad(set_to_none=True)  
                         
                         if step % accum_iter == 0:
-                            self.optimizer.step()
-                            self.optimizer.zero_grad(set_to_none=True)  
                             PATH = config['checkpoint_path']+"model"+str(step)+".pt"
                             print("Saving shit!")
                             torch.save({

@@ -60,7 +60,7 @@ class LLMLayer(torch.nn.Module):
             max_stack = decoder_stacks - 1,
             training=training
         ).to('cuda',non_blocking=True) for i in range(decoder_stacks)])
-        self.lm_head = LMHeadLayer(4*embedding_dimension, number_of_tokens).to('cuda',non_blocking=True)
+        self.lm_head = LMHeadLayer(2*embedding_dimension, number_of_tokens).to('cuda',non_blocking=True)
     
     @custom_fwd(cast_inputs=torch.float16)
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
