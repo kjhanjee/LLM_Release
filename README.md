@@ -6,7 +6,12 @@ Currently Architecture is for a Large Language Model with 128 layers and only ab
 Note: **This still takes into account all the positional embeddings and attention scores for each token as a normal decoder based model would do**
 
 ## Model Architecture
+
+### Overall Model
 ![Architecture](/img/Architecture.png)
+
+### Decoder Layers
+![Decoder](/img/Decoder.png)
 
 ## Performance
 
@@ -24,11 +29,13 @@ The model can be improved for 4K and 8K context lengths. For every 2K increase i
 
 ## Current Config
 Currently I have the model configured at
-* **Embeddings Dimension**: 768
-* **Decoder Layers per stack**: 8
+* **Embeddings Dimension**: 1024
+* **Decoder Layers per stack**: 8 (This allows me to train at a batch size of 2 on my measly GPU)
 * **Decoder Stacks**: 4
-
-This allows me to train at a batch size of 2 on my measly GPU
+* **Param Count**: 78M
+* **Precision Mode**: Single Precision (32 bit)
+* **Model File Size**: 7.23 GB
+* **Tokenizer**: BPE Tokenizer with 110000 vocab size
 
 ## Current Training infrastructure
 Currently the model is being trained on simple retail specs
