@@ -43,9 +43,9 @@ class DecoderStackLayer(torch.nn.Module):
         self.feed_forward1 = FeedForwardLayer(embedding_dimension,4*embedding_dimension)
         
         self.normalize2_1 = torch.nn.LayerNorm(embedding_dimension)
-        self.decoder_dim2 = int(2*embedding_dimension/number_of_layers)
-        self.feed_forward2 = FeedForwardLayer(2*embedding_dimension,16*embedding_dimension)
-        self.normalize2_2 = torch.nn.LayerNorm(2*embedding_dimension)
+        self.decoder_dim2 = int(4*embedding_dimension/number_of_layers)
+        self.feed_forward2 = FeedForwardLayer(4*embedding_dimension,8*embedding_dimension)
+        self.normalize2_2 = torch.nn.LayerNorm(4*embedding_dimension)
 
         self.decoder_layers = torch.nn.ModuleList([DecoderLayer(embedding_dimension,number_of_heads,dropout_rate,self.decoder_dim1,training)
                                                    if self.stack_index != self.max_stack
