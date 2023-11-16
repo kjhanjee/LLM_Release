@@ -1,3 +1,5 @@
 # Model outputs
 /checkpoint
 /checkpoint_2_64
+/model/_pycache_
+/utils/_pycache_
