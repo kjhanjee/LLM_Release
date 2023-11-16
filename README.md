@@ -16,7 +16,7 @@ Note: **This still takes into account all the positional embeddings and attentio
 ## Performance
 
 * **Size** is nearly 1/8th the size of a 32 - 36 Layer 2B normal Transformer Decoder based model at 32 bit precision
-
+* **Cross Entropy Loss** After 2700+ steps the current loss stands at 0.07 and reducing
 * **Drawbacks** A large Linear layer at the end that increases the memory dependence due to the increase in number of parameters. This can be bad for the GPU
 
 ## Further study
