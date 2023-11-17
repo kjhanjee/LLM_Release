@@ -1,7 +1,14 @@
 # Experimental Large Language Models Codespace
 
 ## Current Experiment
-The given Architecture is for a Large Language Model with 64 layers and only about 550 M parameters that allow better loss reduction than current Foundational LLMs. The 64 layers are split in 2 stacks. First stack has 32 layers that parallely create about 16 feature dimensions each for the tokens. Last stack has 32 layers as well parallely creating 64 feature dimensions each for the tokens. This leads to a lower memory overhead for Decoder layers, and multiple decoder layers can be parallely stacked together for better outputs. Due to the unavailabiltiy of better hardware cannot test and optimize for 4k, 8K or larger context windows and higher sample size. Please feel free to take the architecture and train your own LLM model. There are tons of pretraining datasets available on the internet, use any and check the performance for yourself.
+The given Architecture is for a Large Language Model with 64 layers and only about 550 M parameters that allow better loss reduction than current Foundational LLMs. The 64 layers are split in 2 stacks.
+
+* First stack has 32 layers that parallely create about 16 feature dimensions for each token input. 
+* Second stack also has 32 layers, parallely creating 64 feature dimensions for each token input.
+
+This leads to a lower memory overhead for Decoder layers, and multiple decoder layers can be parallely stacked together for better outputs. Due to the unavailabiltiy of better hardware cannot test and optimize for 4k, 8K or larger context windows and higher sample size.
+
+Please feel free to take the architecture, train your own LLM model, and share the results with me. Your support and contributions are highly appreciated and will make it better for the commnuity as well.
 
 Note: **This still takes into account all the positional embeddings and attention scores for each token as a normal decoder based model would do**
 
