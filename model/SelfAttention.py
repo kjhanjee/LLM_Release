@@ -48,7 +48,7 @@ class SelfAttention(torch.nn.Module):
         for index, item in enumerate(temp_mask):
             for index2 in range(len(item)):
                 temp_mask[index][index2] = mask[index]
-            temp_mask[index] = temp_mask[index].triu(0) # Sequence X Sequence dimension Matrix with Mask values as 0 for upper diagonal
+            temp_mask[index] = temp_mask[index].triu(0) # Sequence X Sequence Matrix with Mask values as 0 for upper diagonal
         attention_weights = attention_weights.masked_fill(temp_mask == 0, -1e22) # Very Small number assignment so that further processing is not done on the Attention Weight
         attention_scores = self.softmax(attention_weights) # Weight to scores
         out = bmm(attention_scores, value) # Batch matric product of Attention scores and the input
