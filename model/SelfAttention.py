@@ -44,11 +44,11 @@ class SelfAttention(torch.nn.Module):
         value = self.v_layer(x)
         attention_weights = matmul(query, key.transpose(-2, -1)) # Creating Key . Query
         attention_weights = attention_weights / np.sqrt(self.head_dimension) # Weight Scaling
-        temp_mask = ones((attention_weights.shape[0],attention_weights.shape[1],attention_weights.shape[2]), dtype = torch.float16, device='cuda') # Temporary Mask object with all 1s
+        temp_mask = ones((attention_weights.shape[0],attention_weights.shape[1],attention_weights.shape[2]), dtype = torch.float32, device='cuda') # Temporary Mask object with all 1s
         for index, item in enumerate(temp_mask):
             for index2 in range(len(item)):
                 temp_mask[index][index2] = mask[index]
-            temp_mask[index] = temp_mask[index].triu(0) # Sequence X Sequence Matrix with Mask values as 0 for upper diagonal
+            temp_mask[index] = temp_mask[index].tril(0) # Sequence X Sequence Matrix with Mask values as 0 for upper diagonal
         attention_weights = attention_weights.masked_fill(temp_mask == 0, -1e22) # Very Small number assignment so that further processing is not done on the Attention Weight
         attention_scores = self.softmax(attention_weights) # Weight to scores
         out = bmm(attention_scores, value) # Batch matric product of Attention scores and the input

@@ -169,16 +169,17 @@ class Trainer:
                             for item in tensor:
                                 if not int(np.argmax(item.detach().cpu().numpy()))==24:
                                     outputs[index].append(int(np.argmax(item.detach().cpu().numpy())))
-
                         
-                        
-                        print(f'\n\nStep {step} Loss: ', loss.item())
                         print(f"\n\nStep {step} Output: "+str(self.tokenizer.decode_batch(outputs,skip_special_tokens=False)))
+                        print(f"\n\n Output Dtype: {out.dtype}")
                         
                         loss.backward()                     
                         torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
                         self.optimizer.step()
-                        self.optimizer.zero_grad(set_to_none=True)  
+                        self.optimizer.zero_grad(set_to_none=True)
+                        
+                        print(f'\n\nStep {step} Loss: ', loss.item())
+                        
                         
                         if step % accum_iter == 0:
                             PATH = config['checkpoint_path']+"model"+str(step)+".pt"

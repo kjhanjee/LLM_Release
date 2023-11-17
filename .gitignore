@@ -1,4 +1,4 @@
 # Model outputs
 /checkpoint
-/model/__pycache__
-/utils/__pycache__
+/model/_pycache_
+/utils/_pycache_
