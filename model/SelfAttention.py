@@ -10,7 +10,7 @@ import numpy as np
 class SelfAttention(torch.nn.Module):
     """Module for creating Self Attention layer for the Multi Head Attention Layer
     """
-    def __init__(self, embedding_dimension:int, head_dimension:int):
+    def __init__(self, embedding_dimension:int, head_dimension:int, training:bool):
         """Init function to intialize the class variables
         
         Args:
@@ -23,6 +23,7 @@ class SelfAttention(torch.nn.Module):
         super().__init__()
         self.embedding_dimension = embedding_dimension
         self.head_dimension = head_dimension
+        self.training = training
         self.k_layer = torch.nn.Linear(embedding_dimension, self.head_dimension)
         self.q_layer = torch.nn.Linear(embedding_dimension, self.head_dimension)
         self.v_layer = torch.nn.Linear(embedding_dimension, self.head_dimension)
@@ -48,8 +49,9 @@ class SelfAttention(torch.nn.Module):
         for index, item in enumerate(temp_mask):
             for index2 in range(len(item)):
                 temp_mask[index][index2] = mask[index]
-            temp_mask[index] = temp_mask[index].tril(0) # Sequence X Sequence Matrix with Mask values as 0 for upper diagonal
-        attention_weights = attention_weights.masked_fill(temp_mask == 0, -1e22) # Very Small number assignment so that further processing is not done on the Attention Weight
+            temp_mask[index] = temp_mask[index].triu(0) # Sequence X Sequence Matrix with Mask values as 0 for upper diagonal
+        if self.training:
+            attention_weights = attention_weights.masked_fill(temp_mask == 0, -1e22) # Very Small number assignment so that further processing is not done on the Attention Weight
         attention_scores = self.softmax(attention_weights) # Weight to scores
         out = bmm(attention_scores, value) # Batch matric product of Attention scores and the input
         return out

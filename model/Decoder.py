@@ -34,7 +34,7 @@ class DecoderLayer(torch.nn.Module):
         self.dropout_rate = dropout_rate
         self.training = training
         self.decoder_dim = decoder_dim
-        self.multi_headed_self_attention = MultiHeadAttention(embedding_dimension, number_of_heads)
+        self.multi_headed_self_attention = MultiHeadAttention(embedding_dimension, number_of_heads, self.training)
         self.residual_reduction = torch.nn.Linear(embedding_dimension,self.decoder_dim)
         self.feed_forward_reduction = torch.nn.Linear(embedding_dimension,self.decoder_dim)
         self.feed_forward = FeedForwardLayer(self.embedding_dimension, 4*self.embedding_dimension) # Feed Forward is autocalculated at 4*Embedding Dimension

@@ -145,21 +145,12 @@ class Trainer:
                         
                         for i, target_entry in enumerate(sequences2):
                             target_tensor[i] = torch.from_numpy(np.array(target_entry[1:]))
-
-                                        
-                        # Compute the model output
-                        clear_output(wait=True)
-                        pbar.display()
-                        print("Current File: ", self.data_generator.last_file)
-                        print(f"Step {step} Input Tensor: "+str([self.tokenizer.decode([int(item.detach().cpu().numpy()) for item in tensor if not item.detach().cpu().numpy()==24],skip_special_tokens = False) for tensor in input_tensor]))
-                        print(f"\n\nStep {step} Target Tensor: "+str([self.tokenizer.decode([int(item.detach().cpu().numpy()) for item in tensor if not item.detach().cpu().numpy()==24],skip_special_tokens = False) for tensor in target_tensor]))
                         
 
                         model_output = self.model.forward(x=input_tensor, mask=mask_tensor)
                         out = model_output.clone().detach()
 
                         # Compute the losses
-                        # The loss is computed on the model output and the target
                         loss = self.loss_function(model_output.transpose(1, 2), target_tensor)
                             
                         # loss = loss / accum_iter
@@ -169,6 +160,12 @@ class Trainer:
                             for item in tensor:
                                 if not int(np.argmax(item.detach().cpu().numpy()))==24:
                                     outputs[index].append(int(np.argmax(item.detach().cpu().numpy())))
+                        
+                        clear_output(wait=True)                
+                        pbar.display()
+                        print("Current File: ", self.data_generator.last_file)
+                        print(f"Step {step} Input Tensor: "+str([self.tokenizer.decode([int(item.detach().cpu().numpy()) for item in tensor if not item.detach().cpu().numpy()==24],skip_special_tokens = False) for tensor in input_tensor]))
+                        print(f"\n\nStep {step} Target Tensor: "+str([self.tokenizer.decode([int(item.detach().cpu().numpy()) for item in tensor if not item.detach().cpu().numpy()==24],skip_special_tokens = False) for tensor in target_tensor]))
                         
                         print(f"\n\nStep {step} Output: "+str(self.tokenizer.decode_batch(outputs,skip_special_tokens=False)))
                         print(f"\n\n Output Dtype: {out.dtype}")

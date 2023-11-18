@@ -10,13 +10,14 @@ class MultiHeadAttention(torch.nn.Module):
     """Module for creating Muti Head Attention Layer
     """
 
-    def __init__(self, embedding_dimension:int, number_of_heads:int):
+    def __init__(self, embedding_dimension:int, number_of_heads:int, training: bool):
         """Init function to initialize the class variables
         
         Args:
             embeddings_dimension (int): Embeddings dimension for the Token Embeddings vector used as input
             number_of_heads (int): Number of heads to divide the Embeddings Dimension into for minute pattern detection
-        
+            training (bool): Whether the model is undergoing training or not
+            
         Returns:
             None
         """
@@ -24,7 +25,8 @@ class MultiHeadAttention(torch.nn.Module):
         self.embedding_dimension = embedding_dimension
         self.head_dimension = embedding_dimension // number_of_heads
         self.number_of_heads = number_of_heads
-        self.self_attentions = torch.nn.ModuleList([SelfAttention(embedding_dimension, self.head_dimension) for _ in range(number_of_heads)])
+        self.training = training
+        self.self_attentions = torch.nn.ModuleList([SelfAttention(embedding_dimension, self.head_dimension, self.training) for _ in range(number_of_heads)])
         self.output_layer = torch.nn.Linear(number_of_heads * self.head_dimension, embedding_dimension)
 
     @custom_fwd(cast_inputs=torch.float16)
