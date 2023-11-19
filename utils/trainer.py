@@ -3,6 +3,7 @@
 # Standard imports
 import os
 import torch
+from torcheval.metrics.functional.text import perplexity
 from tokenizers import Tokenizer
 import numpy as np
 from tqdm import tqdm
@@ -168,6 +169,8 @@ class Trainer:
                         print(f"\n\nStep {step} Target Tensor: "+str([self.tokenizer.decode([int(item.detach().cpu().numpy()) for item in tensor if not item.detach().cpu().numpy()==24],skip_special_tokens = False) for tensor in target_tensor]))
                         
                         print(f"\n\nStep {step} Output: "+str(self.tokenizer.decode_batch(outputs,skip_special_tokens=False)))
+                        perplexity_metric = perplexity(model_output,target_tensor)
+                        print(f"\n\nStep {step} Perplexity: "+str(perplexity_metric.item()))
                         print(f"\n\n Output Dtype: {out.dtype}")
                         
                         loss.backward()                     

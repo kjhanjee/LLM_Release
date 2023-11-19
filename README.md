@@ -23,9 +23,9 @@ Note: **This still takes into account all the positional embeddings and attentio
 ## Performance
 
 * **Size** is nearly 1/8th the size of a 32 - 36 Layer 2B normal Transformer Decoder based model at 32 bit precision
-* **Cross Entropy Loss** After about 100 steps the current loss stands at 0.16 and reducing. This can be made much better with a larger sample set in range of 16-32 items per batch.
+* **Cross Entropy Loss** After about 100 steps the current loss stands at 0.37 and reducing. This can be made much better with a larger sample set in range of 16-32 items per batch.
 * **Drawbacks** A large Linear layer at the end that increases the memory dependence on RAM due to the increase in number of parameters. 
-It is still not completely a retail GPU compatible LLM. The 64 Decoder layers all sit on the GPU leading to a VRAM shortage when training parameters and other overheads are introduced during the training process. Due to this drawback I am only able to train about 1 item per batch only (This could cause issues with Generalization and Loss reduction over varied sample inputs, but without better GPU availability this is the best that I can do on retail as of now.)
+It is still not completely a retail GPU compatible LLM. The 64 Decoder layers all sit on the GPU leading to a VRAM shortage when training parameters and other overheads are introduced during the training process. Due to this drawback I am only able to train about 2 items per batch only (This could cause issues with Generalization and Loss reduction over varied sample inputs, but without better GPU availability this is the best that I can do on retail as of now.)
 
 ## Further study
 The model can be improved for 4K and 8K context lengths. For every 2K increase in context will suggest adding another decoder stack in the middle of the Model though this can lead to higher memory requirements
