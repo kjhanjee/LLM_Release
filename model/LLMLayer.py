@@ -60,7 +60,7 @@ class LLMLayer(torch.nn.Module):
             max_stack = decoder_stacks - 1,
             training=training
         ).to('cuda',non_blocking=True) for i in range(decoder_stacks)])
-        self.lm_head = LMHeadLayer(4*embedding_dimension, number_of_tokens)
+        self.lm_head = LMHeadLayer(8*embedding_dimension, number_of_tokens).to(device='cuda',dtype=torch.float16)
     
     @custom_fwd(cast_inputs=torch.float16)
     def forward(self, x:torch.Tensor, mask:torch.Tensor):
@@ -75,10 +75,10 @@ class LLMLayer(torch.nn.Module):
         """
         token_embeddings = self.token_embedding(x)
         positional_encoding = self.positional_encoding(token_embeddings)
-        positional_encoding_normalized = self.layer_normalization(positional_encoding)
-        decoder_outputs = positional_encoding_normalized
+        # positional_encoding_normalized = self.layer_normalization(positional_encoding)
+        decoder_outputs = positional_encoding
         for decoder_stack in self.decoder_stacks:
             decoder_outputs = decoder_stack(decoder_outputs.to('cuda',non_blocking=True), mask.to('cuda',non_blocking=True))
             mask = torch.ones(mask.size(), device = 'cuda')
-        lm_head_outputs = self.lm_head(decoder_outputs.to('cpu'))
-        return lm_head_outputs
+        lm_head_outputs = self.lm_head(decoder_outputs.to(dtype=torch.float16))
+        return lm_head_outputs.to(device='cpu',dtype=torch.float32)

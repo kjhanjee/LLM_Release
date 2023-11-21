@@ -4,7 +4,6 @@
 import torch
 from torch.cuda.amp.autocast_mode import custom_fwd
 # Custom NN Module classes
-from model.MultiHeadAttention import MultiHeadAttention
 from model.FeedForward import FeedForwardLayer
 
 class DecoderLayer(torch.nn.Module):
@@ -34,15 +33,13 @@ class DecoderLayer(torch.nn.Module):
         self.dropout_rate = dropout_rate
         self.training = training
         self.decoder_dim = decoder_dim
-        self.multi_headed_self_attention = MultiHeadAttention(embedding_dimension, number_of_heads, self.training)
-        self.residual_reduction = torch.nn.Linear(embedding_dimension,self.decoder_dim)
+        self.residual_reduction = torch.nn.Linear(embedding_dimension,self.decoder_dim).to(dtype=torch.float16)
         self.feed_forward_reduction = torch.nn.Linear(embedding_dimension,self.decoder_dim)
-        self.feed_forward = FeedForwardLayer(self.embedding_dimension, 4*self.embedding_dimension) # Feed Forward is autocalculated at 4*Embedding Dimension
+        self.feed_forward = FeedForwardLayer(self.decoder_dim, 4*self.decoder_dim).to(dtype=torch.float16) # Feed Forward is autocalculated at 4*Embedding Dimension
         self.dropout = torch.nn.Dropout(dropout_rate)
-        self.layer_normalization = torch.nn.LayerNorm(self.embedding_dimension)
 
     @custom_fwd(cast_inputs=torch.float16)
-    def forward(self, x: torch.Tensor, mask:torch.Tensor):
+    def forward(self, x: torch.Tensor):
         """Forward method for the layer
         
         Args:
@@ -52,13 +49,9 @@ class DecoderLayer(torch.nn.Module):
         Returns:
             Tensor: Output from the decoder layer of dimension Batch Size X Sequence Length X Embeddings Dimension/number of layers
         """
-        attention_output = self.multi_headed_self_attention(x, mask)
-        residual_output = x + attention_output
-        normalized_residual_output = self.layer_normalization(residual_output)
-        residual_output = self.residual_reduction(normalized_residual_output) # Reducing attention outputs to Embeddings layer/number of layers in dim
-        feed_forward_output = self.feed_forward(normalized_residual_output)
-        feed_forward_output = self.feed_forward_reduction(feed_forward_output)
+        residual_output = self.residual_reduction(x.to(dtype=torch.float16)) # Reducing attention outputs to Embeddings layer/number of layers in dim
+        feed_forward_output = self.feed_forward(residual_output.to(dtype=torch.float16))
         if self.training:
             feed_forward_output = self.dropout(feed_forward_output)
         out = residual_output + feed_forward_output
-        return out
+        return out.to(dtype=torch.float32)

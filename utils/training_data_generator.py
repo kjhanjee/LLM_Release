@@ -84,15 +84,17 @@ class TrainingDataGen:
         """
         if path.find("books") > -1:
             sentences = []
-            processed = config['cleaned_files']
+            # processed = config['cleaned_files']
             found = 0
-            for processed_file in processed:
-                if not path.find(processed_file) > -1:
-                    found = 0
-                else:
-                    sentences = [text]
-                    found = 1
-                    break
+            # for processed_file in self.file_paths:
+            #     if not path.find(processed_file) > -1:
+            #         found = 0
+            #     else:
+                    
+            #         found = 1
+            #         break
+            found = 1
+            sentences = [text]
             if found == 1:
                 return sentences
             else:
