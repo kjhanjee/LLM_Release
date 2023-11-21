@@ -1,7 +1,7 @@
 # Experimental Large Language Models Codespace
 
 ## Current Experiment
-The given Architecture is for a Large Language Model with 256 layers and only about 550 M parameters that allow better loss reduction than current Foundational LLMs. The 64 layers are split in 4 stacks.
+The given Architecture is for a Large Language Model with 256 layers and only about 1.4 B parameters that allow better loss reduction than current Foundational LLMs. The 256 layers are split in 4 stacks.
 
 * First stack has 64 layers that parallely create about 8 feature dimensions for each token input. 
 * Remaining stacks also have 64 layers, parallely creating 64 feature dimensions for each token input.
